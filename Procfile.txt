@@ -1,0 +1,1 @@
+web: go_build_github_com_buglinjo_golang_rest_api
