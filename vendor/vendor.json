@@ -41,6 +41,12 @@
 			"versionExact": "v1.3.0"
 		},
 		{
+			"checksumSHA1": "V0JNBANCSAzTqLq4ROu0WZOmc6Q=",
+			"path": "github.com/go-sql-driver/mysql",
+			"revision": "c0f6b444ad8f92ecd68f86b27635c1fccdede4c4",
+			"revisionTime": "2019-03-30T03:22:41Z"
+		},
+		{
 			"checksumSHA1": "Y2MOwzNZfl4NRNDbLCZa6sgx7O0=",
 			"path": "github.com/golang/protobuf/proto",
 			"revision": "d3c38a4eb4970272b87a425ae00ccc4548e2f9bb",
@@ -49,6 +55,12 @@
 		{
 			"checksumSHA1": "PTjdwVQCZP870BNHcMkktJcQhG8=",
 			"path": "github.com/jinzhu/gorm",
+			"revision": "8b07437717e71c2ff00602ae19f8353ba10aafbb",
+			"revisionTime": "2019-03-10T12:17:21Z"
+		},
+		{
+			"checksumSHA1": "eECxSkwh0WmhLwaxHfkvcLOWS08=",
+			"path": "github.com/jinzhu/gorm/dialects/mysql",
 			"revision": "8b07437717e71c2ff00602ae19f8353ba10aafbb",
 			"revisionTime": "2019-03-10T12:17:21Z"
 		},
