@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/buglinjo/golang-rest-api/app/routes"
 	"github.com/buglinjo/golang-rest-api/config"
@@ -34,7 +35,7 @@ func setupDB() *gorm.DB {
 
 func setupRouter(db *gorm.DB) {
 	r := routes.Setup(db)
-	r.Run()
+	r.Run(":" + os.Getenv("APP_PORT"))
 }
 
 
