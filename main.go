@@ -38,5 +38,5 @@ func setupDB() *gorm.DB {
 
 func setupRouter(db *gorm.DB) {
 	r := routes.Setup(db)
-	r.Run(":" + os.Getenv("PORT"))
+	_ = r.Run(":" + os.Getenv("PORT"))
 }

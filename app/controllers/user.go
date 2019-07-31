@@ -6,7 +6,6 @@ import (
 	"github.com/buglinjo/golang-rest-api/app/models"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func List(c *gin.Context) {
@@ -16,15 +15,15 @@ func List(c *gin.Context) {
 	}
 
 	user := &models.User{}
-	db = db.Find(&user)
+	//db = db.Find(&user)
 
-	check := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte("passworD123"))
+	//check := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte("passworD123"))
+
+	//c.JSON(200, gin.H{
+	//	"check": db.Value,
+	//})
 
 	c.JSON(200, gin.H{
-		"check": db.Value,
+		"user": db.Find(&user).Value,
 	})
-
-	// c.JSON(200, gin.H{
-	// 	"user": db.Find(&user).Value,
-	// })
 }
