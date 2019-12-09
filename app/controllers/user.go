@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/buglinjo/golang-rest-api/app/models"
+	"github.com/buglinjo/golang-rest-api/app/responses"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
@@ -15,15 +16,6 @@ func List(c *gin.Context) {
 	}
 
 	user := &models.User{}
-	//db = db.Find(&user)
 
-	//check := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte("passworD123"))
-
-	//c.JSON(200, gin.H{
-	//	"check": db.Value,
-	//})
-
-	c.JSON(200, gin.H{
-		"user": db.Find(&user).Value,
-	})
+	responses.Success(c, 200, user.All(db))
 }
