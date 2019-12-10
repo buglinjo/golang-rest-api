@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"fmt"
-
 	"github.com/buglinjo/golang-rest-api/app/models"
 	"github.com/buglinjo/golang-rest-api/app/responses"
 	"github.com/gin-gonic/gin"
@@ -10,10 +8,7 @@ import (
 )
 
 func List(c *gin.Context) {
-	db, ok := c.MustGet("db").(*gorm.DB)
-	if !ok {
-		fmt.Println("Can't get DB instance")
-	}
+	db, _ := c.MustGet("db").(*gorm.DB)
 
 	user := &models.User{}
 

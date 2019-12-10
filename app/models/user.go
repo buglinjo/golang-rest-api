@@ -2,11 +2,9 @@ package models
 
 import (
 	"html"
-	"os"
 	"strings"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -24,8 +22,8 @@ func Hash(password string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 }
 
-func VerifyPassword(hashedPassword, password string) error {
-	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+func (u *User) VerifyPassword(password string) error {
+	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
 }
 
 func (u *User) BeforeSave() error {
@@ -66,12 +64,13 @@ func (u *User) All(db *gorm.DB) *[]User {
 	return &users
 }
 
-func (u *User) CreateToken() (string, error) {
-	claims := jwt.MapClaims{}
-	claims["authorized"] = true
-	claims["user_id"] = u.Id
-	claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+func (u *User) FindByEmail(db *gorm.DB, email string) (*User, error) {
+	user := User{}
 
-	return token.SignedString([]byte(os.Getenv("API_KEY")))
+	err := db.Model(user).Where("email = ?", email).First(&user).Error
+	if err != nil {
+		return &user, err
+	}
+
+	return &user, nil
 }

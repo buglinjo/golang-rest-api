@@ -1,14 +1,63 @@
 package auth
 
 import (
-	"fmt"
+	"errors"
 
+	"github.com/badoux/checkmail"
+	"github.com/buglinjo/golang-rest-api/app/auth"
 	"github.com/buglinjo/golang-rest-api/app/models"
+	"github.com/buglinjo/golang-rest-api/app/responses"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 )
 
+type login struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 func Login(c *gin.Context) {
-	var u models.User
-	_ = c.ShouldBind(&u)
-	fmt.Println(u)
+	db, _ := c.MustGet("db").(*gorm.DB)
+
+	var l login
+	_ = c.ShouldBind(&l)
+
+	err := l.validate()
+	if err != nil {
+		responses.Error(c, 426, err)
+		return
+	}
+
+	u := &models.User{}
+
+	u, err = u.FindByEmail(db, l.Email)
+	if err != nil {
+		responses.Error(c, 401, errors.New("email or password is incorrect"))
+		return
+	}
+
+	err = u.VerifyPassword(l.Password)
+	if err != nil {
+		responses.Error(c, 401, errors.New("email or password is incorrect"))
+		return
+	}
+
+	var token string
+	token, err = auth.CreateToken(u.Id)
+
+	responses.Success(c, 200, token)
+}
+
+func (l *login) validate() error {
+	if l.Password == "" {
+		return errors.New("password is required")
+	}
+	if l.Email == "" {
+		return errors.New("email is required")
+	}
+	if err := checkmail.ValidateFormat(l.Email); err != nil {
+		return errors.New("email is invalid")
+	}
+
+	return nil
 }
