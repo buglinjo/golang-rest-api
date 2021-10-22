@@ -1,7 +1,3 @@
 .DS_Store
 .idea
 .env
-go_build_github_com_buglinjo_golang_rest_api
-/vendor/golang.org/
-/vendor/gopkg.in/
-/vendor/github.com/
