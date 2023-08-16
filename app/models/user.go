@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/buglinjo/golang-rest-api/config"
 	"html"
 	"strings"
 	"time"
@@ -54,7 +55,8 @@ func (u *User) Save(db *gorm.DB) (*User, error) {
 	return u, nil
 }
 
-func (u *User) All(db *gorm.DB) *[]User {
+func (u *User) All() *[]User {
+	db := config.DB
 	var users []User
 	err := db.Model(&User{}).Find(&users).Error
 	if err != nil {
@@ -64,10 +66,23 @@ func (u *User) All(db *gorm.DB) *[]User {
 	return &users
 }
 
-func (u *User) FindByEmail(db *gorm.DB, email string) (*User, error) {
+func (u *User) FindByEmail(email string) (*User, error) {
+	db := config.DB
 	user := User{}
 
 	err := db.Model(user).Where("email = ?", email).First(&user).Error
+	if err != nil {
+		return &user, err
+	}
+
+	return &user, nil
+}
+
+func (u *User) FindById(id int) (*User, error) {
+	db := config.DB
+	user := User{}
+
+	err := db.Model(user).Where("id = ?", id).First(&user).Error
 	if err != nil {
 		return &user, err
 	}

@@ -4,13 +4,19 @@ import (
 	"github.com/buglinjo/golang-rest-api/app/models"
 	"github.com/buglinjo/golang-rest-api/app/responses"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
+	"net/http"
 )
 
-func List(c *gin.Context) {
-	db, _ := c.MustGet("db").(*gorm.DB)
+type UserController struct{}
 
+func (uc *UserController) List(c *gin.Context) {
 	user := &models.User{}
 
-	responses.Success(c, 200, user.All(db))
+	responses.Success(c, http.StatusOK, user.All())
+}
+
+func (uc *UserController) Profile(c *gin.Context) {
+	user, _ := c.Get("user")
+
+	responses.Success(c, http.StatusOK, user)
 }

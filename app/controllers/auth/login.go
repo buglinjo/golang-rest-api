@@ -2,13 +2,12 @@ package auth
 
 import (
 	"errors"
-
 	"github.com/badoux/checkmail"
 	"github.com/buglinjo/golang-rest-api/app/auth"
 	"github.com/buglinjo/golang-rest-api/app/models"
 	"github.com/buglinjo/golang-rest-api/app/responses"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
+	"strconv"
 )
 
 type login struct {
@@ -17,8 +16,6 @@ type login struct {
 }
 
 func Login(c *gin.Context) {
-	db, _ := c.MustGet("db").(*gorm.DB)
-
 	var l login
 	_ = c.ShouldBind(&l)
 
@@ -30,7 +27,7 @@ func Login(c *gin.Context) {
 
 	u := &models.User{}
 
-	u, err = u.FindByEmail(db, l.Email)
+	u, err = u.FindByEmail(l.Email)
 	if err != nil {
 		responses.Error(c, 401, errors.New("email or password is incorrect"))
 		return
@@ -42,8 +39,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	var token string
-	token, err = auth.CreateToken(u.Id)
+	token, err := auth.CreateToken(strconv.FormatUint(uint64(u.Id), 10))
+	if err != nil {
+		responses.Error(c, 401, errors.New("could not create token"))
+		return
+	}
 
 	responses.Success(c, 200, token)
 }

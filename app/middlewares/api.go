@@ -2,12 +2,11 @@ package middlewares
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
-func Api(db *gorm.DB) gin.HandlerFunc {
+func Api() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Set("db", db)
+		// Write API middleware here
 		c.Next()
 	}
 }

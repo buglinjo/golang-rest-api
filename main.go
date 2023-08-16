@@ -1,42 +1,61 @@
 package main
 
 import (
-	"log"
-	"os"
-
+	"fmt"
 	"github.com/buglinjo/golang-rest-api/app/routes"
 	"github.com/buglinjo/golang-rest-api/config"
-	"github.com/buglinjo/golang-rest-api/migrations"
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/joho/godotenv"
+	"log"
+	"os"
+)
+
+const (
+	envFile = ".env"
 )
 
 func main() {
-	loadEnv()
-	setupRouter(setupDB())
-}
-
-func loadEnv() {
-	err := godotenv.Load()
+	err := Run()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatalf("Error starting the server: %v", err)
 	}
 }
 
-func setupDB() *gorm.DB {
-	db, err := config.Gorm()
+func Run() error {
+	err := loadEnv(envFile)
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("error loading .env file: %v", err)
 	}
 
-	migrations.AutoMigrate(db)
-	// defer db.Close()
+	err = setupDB()
+	if err != nil {
+		return fmt.Errorf("error setting up database: %v", err)
+	}
 
-	return db
+	defer closeDB()
+
+	err = setupServer()
+	if err != nil {
+		return fmt.Errorf("error setting up server: %v", err)
+	}
+
+	return nil
 }
 
-func setupRouter(db *gorm.DB) {
-	r := routes.Setup(db)
-	_ = r.Run(":" + os.Getenv("PORT"))
+func loadEnv(filename string) error {
+	return godotenv.Load(filename)
+}
+
+func setupDB() error {
+	return config.InitDB()
+}
+
+func closeDB() {
+	config.CloseDBConnection()
+}
+
+func setupServer() error {
+	r := routes.Setup()
+
+	return r.Run(":" + os.Getenv("PORT"))
 }
