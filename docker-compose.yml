@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/usr/src/app
+    command: air main.go -b 0.0.0.0
+  db:
+    image: mysql
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD={DB_PASSWORD}
+      - MYSQL_DATABASE={DB_DATABASE}
+
+volumes:
+  mysql-db:

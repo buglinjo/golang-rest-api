@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/buglinjo/golang-rest-api/app/routes"
 	"github.com/buglinjo/golang-rest-api/config"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/joho/godotenv"
 	"log"
 	"os"

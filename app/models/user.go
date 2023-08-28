@@ -2,12 +2,11 @@ package models
 
 import (
 	"github.com/buglinjo/golang-rest-api/config"
+	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 	"html"
 	"strings"
 	"time"
-
-	"github.com/jinzhu/gorm"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {

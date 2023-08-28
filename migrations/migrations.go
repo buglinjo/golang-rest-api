@@ -1,7 +1,7 @@
 package migrations
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 func AutoMigrate(db *gorm.DB) {
