@@ -3,20 +3,24 @@ version: '3.8'
 services:
   api:
     build: .
+    env_file:
+      - .env
     ports:
       - "8080:8080"
     volumes:
       - .:/usr/src/app
     command: air main.go -b 0.0.0.0
   db:
-    image: mysql
+    image: postgres:alpine
     ports:
-      - "3306:3306"
-    command: --default-authentication-plugin=mysql_native_password
+      - "5432:5432"
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD={DB_PASSWORD}
-      - MYSQL_DATABASE={DB_DATABASE}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
 
 volumes:
-  mysql-db:
+  postgres-db:
